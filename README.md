@@ -89,6 +89,22 @@ The main file is used to run the algorithms. You can run the following command t
 python3 main.py
 ```
 
+## **Cite me**
+**BiBTeX**
+```bibtex
+@misc{aL0NEW0LF_Metaheuristics, 
+title={Metaheuristics and stochastic search algorithms implementation}, 
+url={https://github.com/aL0NEW0LF/METAHEURISTICS-AND-STOCHASTIC-SEARCH-ALGORITHMS}, 
+journal={GitHub}, 
+author={Fakhre-Eddine, Mohamed Amine}, 
+year={2024}} 
+```
+
+**APA7**
+```
+Fakhre-Eddine, M. A. (2024). Metaheuristics and stochastic search algorithms implementation. GitHub. https://github.com/aL0NEW0LF/METAHEURISTICS-AND-STOCHASTIC-SEARCH-ALGORITHMS 
+```
+
 ## **References**
 - Braik, M., Ryalat, M.H. & Al-Zoubi, H. A novel meta-heuristic algorithm for solving numerical optimization problems: Ali Baba and the forty thieves. Neural Comput & Applic 34, 409–455 (2022). https://doi.org/10.1007/s00521-021-06392-x
 
