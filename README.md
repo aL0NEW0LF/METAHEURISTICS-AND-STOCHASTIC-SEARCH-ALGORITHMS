@@ -47,10 +47,6 @@ cd METAHEURISTICS-AND-STOCHASTIC-SEARCH-ALGORITHMS
 
 Create a virtual environment:
 
-```shell
-cd indexing-hashing-sqlserver
-```
-
 **Windows**
 
 ```shell
