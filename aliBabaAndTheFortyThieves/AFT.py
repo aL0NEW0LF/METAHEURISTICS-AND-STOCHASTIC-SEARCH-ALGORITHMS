@@ -3,12 +3,11 @@
 #       Github: https://github.com/aL0NEW0LF/               %
 # ----------------------------------------------------------%
 
-from random import random, randint
-from math import exp, log, ceil
+from random import random
+from math import exp, log
 import numpy as np
 from numpy import array
 from numpy.random import rand
-import matplotlib.pyplot as plt
 import utils.functions as functions
 
 class AFT:
