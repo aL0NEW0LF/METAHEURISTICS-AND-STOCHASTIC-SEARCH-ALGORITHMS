@@ -9,6 +9,7 @@ import numpy as np
 from numpy import array
 from numpy.random import rand
 import matplotlib.pyplot as plt
+import utils.functions as functions
 
 class AFT:
     """ 
@@ -20,27 +21,24 @@ class AFT:
     Hyper-parameters: 
     """
 
-    def __init__(self, lb: list, ub: list, dim: int, fobj, itemax: int = 1000, noThieves: int = 40) -> None:
+    def __init__(self, objFunc: str, itemax: int = 1000, noThieves: int = 40) -> None:
         """ 
         Args:
-            lb: list
-                Lower bounds for the problem
-            ub: list
-                Upper bounds for the problem
-            dim: int
-                Dimension of the problem
-            fobj: function
-                Objective function to be minimized
+            objFunc: str
+                Name of the objective function, from F1 to F23
             itemax: int
                 Maximum number of iterations, default is 1000
             noThieves: int
                 Number of thieves, default is 40 
         """
+        if type(objFunc) is not str:
+            raise ValueError("objFunc must be a string")
+        tmp = functions.GetFunctionsDetails(objFunc)
+        if tmp == "Invalid function":
+            raise ValueError("objFunc must be a valid function")
+
         self.noThieves = noThieves
-        self.lb = lb
-        self.ub = ub
-        self.dim = dim
-        self.fobj = fobj
+        self.fobj, self.lb, self.ub, self.dim = tmp
         self.itemax = itemax
         self.Pp = 0
         self.Td = 0
@@ -49,6 +47,7 @@ class AFT:
         self.fit = None
         self.fitness = None
         self.Sorted_thieves = None
+        self.Sorted_fitness = None
         self.gbest = None
         self.fit0 = None
         self.best = None
@@ -62,22 +61,20 @@ class AFT:
         self.fit = array([self.fobj(self.xth[i]) for i in range(self.noThieves)])
         self.fitness = self.fit
         self.Sorted_thieves = self.xth[self.fit.argsort()]
+        self.Sorted_fitness = self.fit[self.fit.argsort()]
         self.gbest = self.Sorted_thieves[0]
-        self.fit0 = self.fit[0]
+        self.fit0 = self.Sorted_fitness[0]
         self.best = self.xth
         self.xab = self.xth
         self.ccurve = np.zeros(self.itemax)
         
     def evolve(self):
         for ite in range(self.itemax):
-            print(f"Iteration# {ite}  Fitness= {self.fit0}")
+            print(f"Iteration# {ite} Fitness = {self.fit0} Best solution = {self.gbest}")
 
-            if (2.75 * (ite / self.itemax) ** 0.1) > 0:
-                self.Pp = 0.1 * log(2.75 * (ite / self.itemax) ** 0.1)
-            else:
-                self.Pp = 0
+            self.Pp = 0.1 * log(2.75 * ((ite + 1) / self.itemax) ** 0.1)
 
-            self.Td = exp(-2 * (ite / self.itemax) ** 2)
+            self.Td = 2 * exp(-2 * ((ite + 1) / self.itemax) ** 2)
             self.a = np.ceil((self.noThieves - 1) * rand(self.noThieves))
 
             for i in range(self.noThieves):
@@ -93,7 +90,7 @@ class AFT:
 
             for i in range(self.noThieves):
                 self.fit[i] = self.fobj(self.xth[i])
-                if (self.xth[i] - self.lb <= 0).all() and (self.xth[i] - self.ub >= 0).all():
+                if not ((self.xth[i] - self.lb) <= 0).all() and not ((self.xth[i] - self.ub) >= 0).all():
                     self.xab[i] = self.xth[i]
                     if self.fit[i] < self.fitness[i]:
                         self.best[i] = self.xth[i]
