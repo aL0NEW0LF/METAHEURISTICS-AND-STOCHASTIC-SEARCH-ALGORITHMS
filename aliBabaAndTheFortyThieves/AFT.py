@@ -56,7 +56,10 @@ class AFT:
         self.gbestSol = None
         
     def initialize_variables(self):
-        self.xth = array([[self.lb[j] - random() * (self.lb[j] - self.ub[j]) for j in range(self.dim)] for i in range(self.noThieves)])
+        if isinstance(self.lb, (int, float)) and isinstance(self.ub, (int, float)):
+            self.xth = array([[self.lb - random() * (self.lb - self.ub) for j in range(self.dim)] for i in range(self.noThieves)])
+        else:
+            self.xth = array([[self.lb[j] - random() * (self.lb[j] - self.ub[j]) for j in range(self.dim)] for i in range(self.noThieves)])
         self.fit = array([self.fobj(self.xth[i]) for i in range(self.noThieves)])
         self.fitness = self.fit
         self.Sorted_thieves = self.xth[self.fit.argsort()]
@@ -82,7 +85,10 @@ class AFT:
                         self.xth[i] = self.gbest + (self.Td * (self.best[i] - self.xab[i]) * rand() + self.Td * (self.xab[i] - self.best[int(self.a[i])]) * rand()) * np.sign(random() - 0.50)
                     else:
                         for j in range(self.dim):
-                            self.xth[i, j] = self.Td * ((self.ub[j] - self.lb[j]) * random() + self.lb[j])
+                            if isinstance(self.lb, (int, float)) and isinstance(self.ub, (int, float)):
+                                self.xth[i, j] = self.Td * ((self.ub - self.lb) * random() + self.lb)
+                            else:
+                                self.xth[i, j] = self.Td * ((self.ub[j] - self.lb[j]) * random() + self.lb[j])
                 else:
                     for j in range(self.dim):
                         self.xth[i, j] = self.gbest[j] - (self.Td * (self.best[i, j] - self.xab[i, j]) * rand() + self.Td * (self.xab[i, j] - self.best[int(self.a[i]), j]) * rand()) * np.sign(random() - 0.50)

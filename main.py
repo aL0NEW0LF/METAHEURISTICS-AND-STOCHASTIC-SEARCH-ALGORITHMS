@@ -1,12 +1,13 @@
 from aliBabaAndTheFortyThieves.AFT import AFT
+from virus_colony_search.VCS import VCS
 import utils.plot as plot
 
 if __name__ == "__main__":
     itemax = 1000
-    noThieves = 30
-    AFT = AFT("F17", itemax, noThieves)
-    AFT.initialize_variables()
+    noThieves = 15
+    VCS = VCS("F10", itemax, noThieves)
+    VCS.initialize_variables()
 
-    AFT.evolve()
+    VCS.evolve()
 
-    plot.func_plot("F17", AFT.gbestSol, "AFT")
+    plot.func_plot("F10", VCS.bestVirus, "VCS")
