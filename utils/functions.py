@@ -24,7 +24,21 @@ def GetFunctionsDetails(F):
         'F20': (F20, 0, 1, 6),
         'F21': (F21, 0, 10, 4),
         'F22': (F22, 0, 10, 4),
-        'F23': (F23, 0, 10, 4)
+        'F23': (F23, 0, 10, 4),
+        'F24': (F24, -100, 100, 30),
+        'F25': (F25, -100, 100, 30),
+        'F26': (F26, -100, 100, 30),
+        'F27': (F27, -100, 100, 30),
+        'F28': (F28, -100, 100, 30),
+        'F29': (F29, -100, 100, 30),
+        'F30': (F30, -100, 100, 30),
+        'F31': (F31, -100, 100, 30),
+        'F32': (F32, -100, 100, 30),
+        'F33': (F33, -100, 100, 30),
+        'F34': (F34, -500, 500, 30),
+        'F35': (F35, -100, 100, 30),
+        'F36': (F36, -100, 100, 30),
+        'F37': (F37, -100, 100, 30)
     }
     return switcher.get(F, "Invalid function")
 
@@ -143,3 +157,96 @@ def F23(x):
 
 def Ufun(x, a, k, m):
     return k*((x-a)**m)*(x>a) + k*((-x-a)**m)*(x<(-a))
+
+# CEC’20 Benchmark funtions
+## Bent Cigar Function
+def F24(x):
+    x = np.array(x)
+    return x[0]**2 + 10**6 * np.sum(x[1:]**2)
+
+## Rastrigin’s Function
+def F25(x):
+    x = np.array(x)
+    return np.sum(x ** 2 - 10 * np.cos(2 * np.pi * x) + 10)
+
+## High Conditioned Elliptic Function
+def F26(x):
+    x = np.array(x)
+    return np.sum(((10 ** 6) ** (np.arange(len(x)) / (len(x) - 1))) * x ** 2)
+
+## HGBat Function
+def F27(x):
+    x = np.array(x)
+    return ((np.sum(x ** 2)) ** 2 - np.sum(x) ** 2) ** (1 / 2) + (0.5 * np.sum(x ** 2) + np.sum(x)) / len(x) + 0.5
+
+## Rosenbrock’s Function
+def F28(x):
+    x = np.array(x)
+    return np.sum(100 * (x[:-1] ** 2 - x[1:]) ** 2 + (x[:-1] - 1) ** 2)
+
+## Griewank’s Function
+def F29(x):
+    x = np.array(x)
+    return np.sum(x ** 2) / 4000 - np.prod(np.cos(x / np.sqrt(np.arange(1, len(x) + 1)))) + 1
+
+## Ackley’s Function
+def F30(x):
+    x = np.array(x)
+    return -20 * np.exp(-0.2 * ((np.sum(x ** 2) / len(x)) ** 0.5)) - np.exp(np.sum(np.cos(2 * np.pi * x)) / len(x)) + 20 + np.exp(1)
+
+## Happycat Function
+def F31(x):
+    x = np.array(x)
+    return (np.absolute(np.sum(x ** 2) - len(x))) ** (1 / 4) + (0.5 * np.sum(x ** 2) + np.sum(x)) / len(x) + 0.5
+
+## Discus Function
+def F32(x):
+    x = np.array(x)
+    return (10 ** 6) * (x[0] ** 2) + np.sum(x[1:] ** 2)
+
+## Lunacek bi-Rastrigin Function
+def F33(x):
+    x = np.array(x)
+    D = len(x)
+    d = 1
+    s = 1 - 1 / (2 * ((D + 20) ** (1 / 2)) - 8.2)
+    mu1 = 2.5
+    mu2 = -np.sqrt((mu1 ** 2 - d) / s)
+    return np.min(np.sum((x - mu1) ** 2, axis=1), d * D + s * np.sum((x - mu2) ** 2, axis=1)) + 10 * (D - np.sum(np.cos(2 * np.pi * (x - mu1))))
+
+## Modified Schwefel’s Function
+def F34(x):
+    def g(z):
+        if np.absolute(z) <= 500:
+            return z * np.sin((np.absolute(z)) ** (1 / 2))
+        elif z > 500:
+            return (500 - z % 500) * np.sin((500 - z % 500) ** (1 / 2)) - (z - 500) ** 2 / (10000 * len(x))
+        elif z < -500:
+            return (np.absolute(z) % 500 - 500) * np.sin(np.absolute(np.absolute(z) % 500 - 500) ** (1 / 2)) - (z + 500) ** 2 / (10000 * len(x)) 
+        
+    x = np.array(x)
+    z = x + 4.209687462275036e+002
+
+    return 418.9829 * len(x) - np.sum(g(z))
+
+## Expanded Schaffer’s Function
+def F35(x):
+    ### Schaffer’s Function
+    def g(x, y):
+        return 0.5 + ((np.sin(x ** 2 - y ** 2) ** 2 - 0.5) / (1 + 0.001 * (x ** 2 + y ** 2)) ** 2)
+    
+    x = np.array(x)
+    return np.sum(g(x[:-1], x[1:])) + g(x[-1], x[0])
+
+## Expanded Rosenbrock’s plus Griewangk’s Function
+def F36(x):
+    x = np.array(x)
+    return F29(F28(x)) + (100 * (x[-1] ** 2 - x[0]) ** 2 + (x[-1] - 1) ** 2)
+
+## Weierstrass Function
+def F37(x):
+    x = np.array(x)
+    a = 0.5
+    b = 3
+    kmax = 20
+    return np.sum([np.sum([(a ** k) * np.cos(2 * np.pi * (b ** k) * (x + 0.5)) for k in range(kmax)]) - len(x) * np.sum([(a ** k) * np.cos(2 * np.pi * (b ** k) * 0.5) for k in range(kmax)])])   
