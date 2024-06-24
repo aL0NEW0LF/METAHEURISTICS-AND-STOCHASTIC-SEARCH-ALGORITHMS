@@ -249,4 +249,4 @@ def F37(x):
     a = 0.5
     b = 3
     kmax = 20
-    return np.sum([np.sum([(a ** k) * np.cos(2 * np.pi * (b ** k) * (x + 0.5)) for k in range(kmax)]) - len(x) * np.sum([(a ** k) * np.cos(2 * np.pi * (b ** k) * 0.5) for k in range(kmax)])])   
+    return np.sum([np.sum([(a ** k) * np.cos(2 * np.pi * (b ** k) * (x + 0.5)) for k in range(kmax)])]) - len(x) * np.sum([(a ** k) * np.cos(2 * np.pi * (b ** k) * 0.5) for k in range(kmax)])
