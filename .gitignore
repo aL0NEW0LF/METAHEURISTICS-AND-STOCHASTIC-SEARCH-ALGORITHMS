@@ -26,3 +26,5 @@ tmp/*
 *.m
 
 docs/
+
+tsplib/
