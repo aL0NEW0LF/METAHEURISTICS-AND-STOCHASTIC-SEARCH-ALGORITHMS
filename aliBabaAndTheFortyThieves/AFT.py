@@ -72,7 +72,7 @@ class AFT:
         
     def evolve(self):
         for ite in range(self.itemax):
-            print(f"Iteration# {ite} Fitness = {self.fit0} Best solution = {self.gbest}")
+            print(f"Iteration# {ite} Fitness = {self.fit0}")
 
             self.Pp = 0.1 * log(2.75 * ((ite + 1) / self.itemax) ** 0.1)
 
@@ -83,6 +83,8 @@ class AFT:
                 if random() >= 0.5:
                     if random() > self.Pp:
                         self.xth[i] = self.gbest + (self.Td * (self.best[i] - self.xab[i]) * rand() + self.Td * (self.xab[i] - self.best[int(self.a[i])]) * rand()) * np.sign(random() - 0.50)
+                        self.xth[i] = np.maximum(self.xth[i], self.lb)
+                        self.xth[i] = np.minimum(self.xth[i], self.ub)
                     else:
                         for j in range(self.dim):
                             if isinstance(self.lb, (int, float)) and isinstance(self.ub, (int, float)):
@@ -92,6 +94,8 @@ class AFT:
                 else:
                     for j in range(self.dim):
                         self.xth[i, j] = self.gbest[j] - (self.Td * (self.best[i, j] - self.xab[i, j]) * rand() + self.Td * (self.xab[i, j] - self.best[int(self.a[i]), j]) * rand()) * np.sign(random() - 0.50)
+                        self.xth[i] = np.maximum(self.xth[i], self.lb)
+                        self.xth[i] = np.minimum(self.xth[i], self.ub)
 
             for i in range(self.noThieves):
                 self.fit[i] = self.fobj(self.xth[i])

@@ -21,7 +21,7 @@ class VCS:
     Hyper-parameters: 
     """
 
-    def __init__(self, objFunc: str, itemax: int = 1000, noViruses: int = 100, lamda: float = 0.5, sigma: float = 1.5) -> None:
+    def __init__(self, objFunc: str = None, Problem = None, itemax: int = 1000, noViruses: int = 100, lamda: float = 0.5, sigma: float = 1.5) -> None:
         """ 
         Args:
             objFunc: str
@@ -34,10 +34,20 @@ class VCS:
                 Infection rate, percentage of the best viruses that we will keep, default is 0.5
         """
         self.itemax = itemax
-        self.noViruses = noViruses
         self.lamda = lamda
         self.sigma = sigma
-        self.fobj, self.lb, self.ub, self.dim = functions.GetFunctionsDetails(objFunc)
+        self.noViruses = noViruses
+        if objFunc is not None:
+            if isinstance(objFunc, tuple):
+                self.fobj, self.lb, self.ub, self.dim = objFunc[0], int(objFunc[1]), int(objFunc[2]), int(objFunc[3])
+            else:
+                self.fobj, self.lb, self.ub, self.dim = functions.GetFunctionsDetails(objFunc)
+        elif Problem is not None:
+            self.fobj = Problem.trace_tours
+            self.dim = int(Problem.dimension)
+            self.lb = 0
+            self.ub = int(np.max(np.array([[Problem.get_weight(i, j) for j in Problem.get_nodes()] for i in Problem.get_nodes()])))
+        
         self.virus = None
         self.fitness = None
         self.gbest = None
@@ -50,12 +60,14 @@ class VCS:
             self.virus = array([[self.lb - random() * (self.lb - self.ub) for j in range(self.dim)] for i in range(self.noViruses)])
         else:
             self.virus = array([[self.lb[j] - random() * (self.lb[j] - self.ub[j]) for j in range(self.dim)] for i in range(self.noViruses)])
+        # print(self.virus)
         self.fitness = array([self.fobj(self.virus[i]) for i in range(self.noViruses)])
+        # print(self.fitness)
         self.best = self.virus[self.fitness.argmin()]
         self.bestFit = self.fitness.min()
         self.bestVirus = self.best.copy()
         self.gbest = self.best.copy()
-
+        
     def calculate_xmean__(self):
         ## Calculate the weighted mean of the λ best individuals by
         ## using the infection rate λ
@@ -69,23 +81,29 @@ class VCS:
     def evolve(self):
         # Viruses diffusion
         for ite in range(self.itemax):
+            pop = []
             for i in range(self.noViruses):
                 gauss = np.array([np.random.normal(self.gbest[j], self.sigma) for j in range(self.dim)])
                 pos_new = gauss + np.random.uniform(0, 1) * self.gbest - np.random.uniform(0, 1) * self.virus[i]
                 pos_new = np.maximum(pos_new, self.lb)
                 pos_new = np.minimum(pos_new, self.ub)
+                pop.append(pos_new)
+
+            pop = np.array(pop)
 
             ## Evaluate the new position, FEs=FEs+N;
-            fit_new = self.fobj(pos_new)
+            fitness = np.array([self.fobj(pop[i]) for i in range(self.noViruses)])
+            # print(fitness)
+            # print(self.fitness)
             ## Update the best virus
-            if fit_new < self.bestFit:
-                self.bestFit = fit_new
-                self.bestVirus = pos_new.copy()
-            ## Update the virus
-            if fit_new < self.fitness[i]:
-                self.virus[i] = pos_new.copy()
-                self.fitness[i] = fit_new
-
+            for i in range(self.noViruses):
+                if fitness[i] < self.bestFit:
+                    self.bestFit = fitness[i]
+                    self.bestVirus = pop[i].copy()
+                if fitness[i] < self.fitness[i]:
+                    self.virus[i] = pop[i].copy()
+                    self.fitness[i] = fitness[i]
+                
             # Host cells infection
             x_mean = self.calculate_xmean__()
 
@@ -105,9 +123,10 @@ class VCS:
             self.fitness = fitness.copy()
 
             ## Update the best virus
-            if fitness.min() < self.bestFit:
-                self.bestFit = fitness.min()
-                self.bestVirus = pop[fitness.argmin()].copy()
+            for i in range(self.noViruses):
+                if fitness[i] < self.bestFit:
+                    self.bestFit = fitness[i]
+                    self.bestVirus = pop[i].copy()
 
             ## Calculate the weighted mean of the λ best individuals by
             ## using the infection rate λ
@@ -132,3 +151,5 @@ class VCS:
                             self.bestVirus = self.virus[i].copy()
             print("Iteration: {} | Best fitness: {}".format(ite, self.bestFit))
         return self.bestVirus, self.bestFit
+    
+    
