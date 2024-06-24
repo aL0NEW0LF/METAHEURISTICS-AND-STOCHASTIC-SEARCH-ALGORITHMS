@@ -25,6 +25,8 @@ def func_plot(func_name,Best_pos,algo_name):
         x = y = np.arange(-1, 1.01, 0.01)
     elif func_name == 'F18':
         x = y = np.arange(-5, 5.01, 0.06)
+    elif func_name in ['F24', 'F25', 'F26', 'F27', 'F28', 'F29', 'F30', 'F31', 'F32', 'F33', 'F35', 'F36', 'F37']:
+        x = y = np.arange(-100, 101, 2)
 
     L = len(x)
     f = np.zeros((L, L))
