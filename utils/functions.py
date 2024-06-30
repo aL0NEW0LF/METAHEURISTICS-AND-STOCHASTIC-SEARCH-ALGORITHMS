@@ -38,7 +38,7 @@ def GetFunctionsDetails(F):
         'F34': (F34, -500, 500, 30),
         'F35': (F35, -100, 100, 30),
         'F36': (F36, -100, 100, 30),
-        'F37': (F37, -100, 100, 30)
+        'F37': (F37, -100, 100, 30),
     }
     return switcher.get(F, "Invalid function")
 

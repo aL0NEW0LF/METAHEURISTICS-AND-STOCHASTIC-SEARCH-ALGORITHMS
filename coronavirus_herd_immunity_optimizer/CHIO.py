@@ -74,6 +74,7 @@ class CHIO:
         self.bestFit = self.fitness.min()
         self.bestHerd = np.copy(self.hip)
         self.bestHerdFit = np.copy(self.fitness)
+        self.fitness_track = np.zeros(self.itemax)
 
     def evolve(self):
         # Herd immunity evolution
@@ -122,8 +123,9 @@ class CHIO:
 
             self.gbest = np.copy(self.hip[self.fitness.argmin()])
             self.bestFit = self.fitness.min()
+            self.fitness_track[ite] = self.bestFit
             self.bestHerd = np.copy(self.hip)
             self.bestHerdFit = np.copy(self.fitness)
             print("Iteration: {} | Best fitness: {}".format(ite, self.bestFit))
 
-        return self.bestFit, self.gbest
+        return self.bestFit, self.gbest, self.fitness_track

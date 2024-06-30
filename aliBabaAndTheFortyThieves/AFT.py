@@ -93,7 +93,7 @@ class AFT:
                                 self.xth[i, j] = self.Td * ((self.ub[j] - self.lb[j]) * random() + self.lb[j])
                 else:
                     for j in range(self.dim):
-                        self.xth[i, j] = self.gbest[j] - (self.Td * (self.best[i, j] - self.xab[i, j]) * rand() + self.Td * (self.xab[i, j] - self.best[int(self.a[i]), j]) * rand()) * np.sign(random() - 0.50)
+                        self.xth[i] = self.gbest - (self.Td * (self.best[i] - self.xab[i]) * rand() + self.Td * (self.xab[i] - self.best[int(self.a[i])]) * rand()) * np.sign(random() - 0.50)
                         self.xth[i] = np.maximum(self.xth[i], self.lb)
                         self.xth[i] = np.minimum(self.xth[i], self.ub)
 
@@ -113,4 +113,4 @@ class AFT:
         self.bestThieves = np.where(self.fitness == min(self.fitness))[0]
         self.gbestSol = self.best[self.bestThieves[0]]
         self.fitness = self.fobj(self.gbestSol)
-        return self.fitness, self.gbestSol, self.ccurve
+        return self.fit0, self.gbest, self.ccurve

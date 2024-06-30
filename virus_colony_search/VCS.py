@@ -1,4 +1,4 @@
-# Created by "FAKHRE-EDDINE" at 16:00, 17/03/2024 ----------%
+# Created by "FAKHRE-EDDINE" at 18:00, 17/03/2024 ----------%
 #       Email: mohamedfakhreeddine2019@gmail.com            %
 #       Github: https://github.com/aL0NEW0LF/               %
 # ----------------------------------------------------------%
@@ -67,6 +67,15 @@ class VCS:
         self.bestFit = self.fitness.min()
         self.bestVirus = self.best.copy()
         self.gbest = self.best.copy()
+        self.fitness_track = np.zeros(self.itemax)
+
+    """ def initialize_variables_tsp(self):
+        self.virus = np.random.randint(1, self.dim, (self.noViruses, self.dim))
+        self.fitness = array(self.fobj(self.virus))
+        self.best = self.virus[self.fitness.argmin()]
+        self.bestFit = self.fitness.min()
+        self.bestVirus = self.best.copy()
+        self.gbest = self.best.copy() """
         
     def calculate_xmean__(self):
         ## Calculate the weighted mean of the λ best individuals by
@@ -149,7 +158,81 @@ class VCS:
                         if self.fitness[i] < self.bestFit:
                             self.bestFit = self.fitness[i]
                             self.bestVirus = self.virus[i].copy()
+            self.fitness_track[ite] = self.bestFit
             print("Iteration: {} | Best fitness: {}".format(ite, self.bestFit))
-        return self.bestVirus, self.bestFit
+        print(self.bestVirus, self.bestFit, self.fitness_track)
+        return self.bestFit, self.bestVirus, self.fitness_track
     
-    
+    """ def evolve_tsp(self):
+        convergence_curve = np.zeros(self.itemax)
+
+        # Viruses diffusion
+        for ite in range(self.itemax):
+            for i in range(self.noViruses):
+                gauss = np.array([np.random.normal(self.gbest[j], self.sigma) for j in range(self.dim)])
+                print(gauss)
+                pos_new = gauss + np.random.uniform(0, 1) * self.gbest - np.random.uniform(0, 1) * self.virus[i]
+                pos_new = np.maximum(pos_new, self.lb)
+                pos_new = np.minimum(pos_new, self.ub)
+            print(pos_new)
+            ## Evaluate the new position, FEs=FEs+N;
+            fit_new = self.fobj(pos_new)
+            ## Update the best virus
+            if fit_new < self.bestFit:
+                self.bestFit = fit_new
+                self.bestVirus = pos_new.copy()
+            ## Update the virus
+            if fit_new < self.fitness[i]:
+                self.virus[i] = pos_new.copy()
+                self.fitness[i] = fit_new
+
+            # Host cells infection
+            x_mean = self.calculate_xmean__()
+
+            sigma = self.sigma * (1 - ite / self.itemax)
+            pop = []
+            for i in range(self.noViruses):
+                pos_new = x_mean + sigma * np.random.normal(0, 1, self.dim)
+                pos_new = np.maximum(pos_new, self.lb)
+                pos_new = np.minimum(pos_new, self.ub)
+                pop.append(pos_new)
+
+            pop = np.array(pop)
+            
+            sol = np.argsort(pop, axis=1)
+
+            ## Evaluate Hpop and updatetheVpop; FEs=FEs+N;
+            fitness = np.array([self.fobj([sol[i, :] + 1]) for i in range(self.noViruses)])
+            self.virus = pop.copy()
+            self.fitness = fitness.copy()
+
+            ## Update the best virus
+            if fitness.min() < self.bestFit:
+                self.bestFit = fitness.min()
+                self.bestVirus = pop[fitness.argmin()].copy()
+
+            ## Calculate the weighted mean of the λ best individuals by
+            ## using the infection rate λ
+            pop = pop[fitness.argsort()]
+            x_mean = self.calculate_xmean__()
+
+            # Immune response
+            for i in range(self.noViruses):
+                pr = (self.dim - i + 1) / self.dim
+                for j in range(self.dim):
+                    if rand() < pr:
+                        self.virus[i, j] = x_mean[j]
+                        if isinstance(self.lb, (int, float)) and isinstance(self.ub, (int, float)):
+                            self.virus[i, j] = np.maximum(self.virus[i, j], self.lb)
+                            self.virus[i, j] = np.minimum(self.virus[i, j], self.ub)
+                        else:
+                            self.virus[i, j] = np.maximum(self.virus[i, j], self.lb[j])
+                            self.virus[i, j] = np.minimum(self.virus[i, j], self.ub[j])
+                        self.fitness[i] = self.fobj(self.virus[i])
+                        if self.fitness[i] < self.bestFit:
+                            self.bestFit = self.fitness[i]
+                            self.bestVirus = self.virus[i].copy()
+            print("Iteration: {} | Best fitness: {}".format(ite, self.bestFit))
+
+            convergence_curve[ite] = self.bestFit
+        return self.bestVirus, self.bestFit, convergence_curve """
