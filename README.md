@@ -5,8 +5,8 @@ A collection of metaheuristics and stochastic search algorithms implemented in P
 ## **Algorithms**
 
 - [x] Ali Baba and the Forty Thieves
-- [ ] Virus Colony Search
-- [ ] String theory algorithm
+- [x] Virus Colony Search
+- [x] Coronavirus herd immunity optimization
 
 ## **Algorithm Details**
 ### **Ali Baba and the Forty Thieves**
@@ -105,5 +105,7 @@ Fakhre-Eddine, M. A. (2024). Metaheuristics and stochastic search algorithms imp
 - Braik, M., Ryalat, M.H. & Al-Zoubi, H. A novel meta-heuristic algorithm for solving numerical optimization problems: Ali Baba and the forty thieves. Neural Comput & Applic 34, 409–455 (2022). https://doi.org/10.1007/s00521-021-06392-x
 
 - Mu Dong Li, Hui Zhao, Xing Wei Weng, & Tong Han (2016). A novel nature-inspired algorithm for optimization: Virus colony search. Advances in Engineering Software, 92, 65-88. https://doi.org/10.1016/j.advengsoft.2015.11.004
+
+- Al-Betar, M.A., Alyasseri, Z.A.A., Awadallah, M.A.et al.Coronavirus herdimmunityoptimizer(CHIO).Neural Comput & Applic33, 5011–5042 (2021). https://doi.org/10.1007/s00521-020-05296-6
 
 - Samady, A. Samashi47/metaheuristics: Implementation of various metaheuristic algorithms in C++ and python. GitHub. https://github.com/Samashi47/Metaheuristics
