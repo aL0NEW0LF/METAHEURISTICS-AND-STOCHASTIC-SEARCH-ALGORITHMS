@@ -1,8 +1,12 @@
+click==8.1.7
+colorama==0.4.6
 contourpy==1.2.0
 cycler==0.12.1
+Deprecated==1.2.14
 fonttools==4.50.0
 kiwisolver==1.4.5
 matplotlib==3.8.3
+networkx==2.8.8
 numpy==1.26.4
 packaging==24.0
 pillow==10.2.0
@@ -10,4 +14,7 @@ plotly==5.21.0
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 six==1.16.0
+tabulate==0.8.10
 tenacity==8.2.3
+tsplib95==0.7.1
+wrapt==1.16.0
